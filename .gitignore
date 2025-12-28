@@ -1,0 +1,30 @@
+# Dossiers et fichiers générés par Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnements virtuels
+venv/
+env/
+.venv/
+.virtualenv/
+
+# Fichiers de configuration locale et secrets
+.env
+.flaskenv
+config.local.py
+secrets.json
+
+# Fichiers de log et de base de données temporaires
+*.log
+*.sqlite3
+
+# Généré par l'OS
+.DS_Store
+Thumbs.db
+
+# Généré par les éditeurs de code courants
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,6 @@
+flask
+requests
+python-dotenv
+# Tkinter est généralement inclus avec Python, mais le lister par précaution.
+# Si vous utilisez un Python sans Tkinter pré-installé, il faudra une étape
+# supplémentaire ou l'installation via le gestionnaire de paquets de votre OS.

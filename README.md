@@ -1,101 +1,71 @@
+# ATTENTION CE N'EST PAS UNE API OFFICIEL
+# 🚀 Strava-Notion Sync App
 
+**Synchronisez automatiquement et instantanément vos activités Strava vers une base de données Notion.**
 
-# 🏃‍♀️ Strava-Notion Sync API
+## 🌟 1. À quoi sert l'application ?
 
-## 🌟 1. Description du Projet
+Cette application permet d'intégrer vos données sportives de Strava dans votre environnement de productivité Notion, offrant un **suivi d'entraînement centralisé et automatique**. Fini la saisie manuelle : toute nouvelle activité Strava est détectée et ajoutée à votre base de données Notion en temps réel si l'application tourne. Il y a un mode rattrapage qui permet de recup tout vos activitées passées.
 
-Cette application est une API légère construite avec **Python Flask** qui permet la **synchronisation automatique et instantanée** de vos activités sportives enregistrées sur **Strava** vers une base de données **Notion** pour un suivi d'entraînement centralisé.
+## 📥 2. Téléchargement et Démarrage Rapide (Pour les Utilisateurs)
 
-Elle intègre une **interface graphique Tkinter** pour simplifier la configuration initiale des clés API et de l'authentification Strava.
+Pour utiliser l'application sans installer Python :
 
-## ✨ 2. Fonctionnalités
+1. **Téléchargez** le fichier d'installation (`.exe` ou `setup.exe`) depuis la page des publications (Releases) :
+**[CLIQUEZ ICI pour télécharger la dernière version]([https://www.google.com/search?q=https://github.com/Kxrwx/API_Strava--Notion/releases/latest](https://github.com/Kxrwx/API_Strava--Notion/releases/tag/v1.2.0))**
+2. **Lancez l'installeur** et suivez les instructions.
+3. Une fois installé, lancez l'application **"StravaNotionSync"**.
 
-  * **Synchronisation en Temps Réel :** Utilise les *webhooks* Strava pour détecter et traiter instantanément les nouvelles activités dès leur création.
-  * **Interface Graphique (GUI) :** Configuration facile de tous les secrets d'API (Strava & Notion) via une fenêtre Tkinter.
-  * **Authentification Simplifiée :** Lancement de l'autorisation OAuth 2.0 Strava directement depuis le GUI.
-  * **Mappage de Données Complètes :** Prise en charge de toutes les activités et transfert des métriques clés de Strava vers Notion.
+---
 
-## 🛠️ 3. Prérequis
+## ⚙️ 3. Guide d'Utilisation et Mode d'Emploi
 
-  * **Python 3.13+**
-  * Un compte **Strava Developer** (pour obtenir un Client ID/Secret)
-  * Un compte **Notion** avec une intégration créée
-  * **Un outil de tunneling** comme `ngrok` ou un serveur public (obligatoire pour recevoir les *webhooks* de Strava en production ou en développement local).
+L'application utilise une interface graphique (GUI) pour guider la configuration en trois étapes.
 
-## 📦 4. Installation et Démarrage
+### Prérequis Indispensables
 
-### 4.1. Cloner le Dépôt
+Pour que la synchronisation fonctionne, vous devez obtenir trois clés auprès des services externes :
 
-```bash
-git clone [URL_DE_VOTRE_DEPOT]
-cd strava-notion-sync-api
-```
+1. **Strava Client ID / Client Secret** : Obtenus sur votre [compte Strava Developer](https://developers.strava.com/).
+2. **Notion Integration Token** : Créé dans [Mes Intégrations Notion](https://www.notion.so/my-integrations).
+3. **Notion Database ID** : L'identifiant de la page de votre base de données cible (voir Section 3.4).
 
-### 4.2. Environnement Virtuel et Dépendances
+### 3.1. Étape 1 : Configuration des Clés API (Onglet **Configuration**)
 
-Créez et activez un environnement virtuel, puis installez les dépendances nécessaires :
+1. Ouvrez l'onglet **Configuration** dans l'application.
+2. Entrez vos clés **Client ID**, **Client Secret** (Strava) et le **Notion Token**.
+3. Entrez l'identifiant de votre **Database ID Notion** (voir 3.4).
+4. Cliquez sur **"Sauvegarder la Configuration"**. Ces clés sont stockées localement dans un fichier `.env`.
 
-```bash
-python3.13 -m venv venv
-source venv/bin/activate  # Pour Windows : venv\Scripts\activate
-pip install flask requests python-dotenv tk
-```
+### 3.2. Étape 2 : Autorisation Strava (Onglet **Connexion Strava**)
 
-### 4.3. Lancement de l'Interface Graphique
+1. Cliquez sur le bouton **"Autoriser Strava"**.
+2. Votre navigateur s'ouvrira, vous demandant d'accorder l'accès à l'application sur Strava.
+3. **Accordez l'accès.** L'application récupérera et stockera automatiquement le **`REFRESH_TOKEN`** nécessaire pour maintenir la connexion Strava active.
 
-L'application est lancée par le script principal du GUI :
+### 3.3. Étape 3 : Démarrage du Service API (Onglet **Service API**)
 
-```bash
-python gui.py  # (Assurez-vous que votre point d'entrée s'appelle bien gui.py)
-```
+1. Cliquez sur le bouton **"Démarrer le Service API"**.
+2. Le serveur Flask démarre en arrière-plan.
 
-## 📐 5. Structure de la Base de Données Notion
+### 3.4. 📐 Structure de la Base de Données Notion
 
-Votre base de données cible dans Notion **doit impérativement** avoir les propriétés suivantes. Veuillez respecter le nommage et le type pour garantir la synchronisation :
+Pour que la synchronisation fonctionne, votre base de données cible dans Notion **doit impérativement** avoir les propriétés suivantes. Veuillez respecter le nommage et le type exacts :
 
 | Propriété Notion | Type | Correspondance Strava |
-| :--- | :--- | :--- |
-| **Activity Name** (ou **Nom**) | Titre | `name` |
-| **Date** | Date | `start_date_local` |
-| **Activity ID** | Nombre | `id` (Identifiant unique) |
-| **Type** | Sélection | `type` (Run, Ride, etc.) |
-| **Distance** | Nombre | `distance` (en mètres) |
-| **Durée** | Nombre | `moving_time` (en secondes) |
-| **D+** | Nombre | `total_elevation_gain` (en mètres) |
-| **Calorie** | Nombre | `calories` |
+| --- | --- | --- |
+| **Activity Name** (ou **Nom**) | Titre | Nom de l'activité |
+| **Date** | Date | Date de début de l'activité |
+| **Activity ID** | Nombre | Identifiant unique de Strava |
+| **Type** | Sélection | Type d'activité (Course, Vélo, etc.) |
+| **Distance** | Nombre | Distance parcourue (en mètres) |
+| **Durée** | Nombre | Temps de mouvement (en secondes) |
+| **D+** | Nombre | Gain d'élévation (en mètres) |
+| **Calorie** | Nombre | Calories dépensées |
 
-## 🚀 6. Utilisation de l'Interface Graphique (GUI)
-
-Le GUI vous guidera à travers les étapes de configuration.
-
-### Étape 1 : Configuration des Secrets
-
-1.  Ouvrez l'onglet **Configuration** dans l'application Tkinter.
-2.  Entrez vos clés obtenues auprès de Strava et Notion (Client ID, Client Secret, Notion Token, Database ID).
-3.  Cliquez sur **"Sauvegarder la Configuration"**. Ces informations sont enregistrées dans un fichier `.env`.
-
-### Étape 2 : Autorisation Strava
-
-1.  Rendez-vous dans l'onglet **Connexion Strava**.
-2.  Cliquez sur le bouton **"Autoriser Strava"**. Votre navigateur s'ouvrira, vous demandant l'autorisation sur Strava.
-3.  Après avoir accordé l'accès, l'API Flask récupérera le **`REFRESH_TOKEN`** nécessaire et le stockera automatiquement.
-
-### Étape 3 : Démarrage du Service API
-
-1.  Ouvrez l'onglet **Service API**.
-2.  Cliquez sur le bouton **"Démarrer le Service API"**.
-3.  Le serveur Flask démarre et se met en attente de *webhooks* sur l'URL publique configurée.
-
-> **❗ Configuration du Webhook Strava :** Après le démarrage de l'API, vous devez enregistrer l'URL publique de votre service auprès de Strava Developer pour que la synchronisation automatique fonctionne. L'URL à fournir est généralement : `https://VOTRE_URL_PUBLIQUE/webhook`.
-
-## 7\. Points de Terminaison de l'API (Flask)
-
-Ces routes sont gérées en arrière-plan par l'application Flask, mais sont essentielles à son fonctionnement :
 
 | Endpoint | Méthode | Rôle |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | `/auth/strava` | `GET` | Gère le processus initial d'échange de code contre un `REFRESH_TOKEN`. |
 | `/webhook` | `GET` | **Vérification** de l'abonnement par Strava (étape de configuration). |
 | `/webhook` | `POST` | **Réception** du *payload* d'une nouvelle activité Strava pour le traitement et l'insertion dans Notion. |
-
------

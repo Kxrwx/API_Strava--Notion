@@ -64,8 +64,3 @@ Pour que la synchronisation fonctionne, votre base de données cible dans Notion
 | **Calorie** | Nombre | Calories dépensées |
 
 
-| Endpoint | Méthode | Rôle |
-| --- | --- | --- |
-| `/auth/strava` | `GET` | Gère le processus initial d'échange de code contre un `REFRESH_TOKEN`. |
-| `/webhook` | `GET` | **Vérification** de l'abonnement par Strava (étape de configuration). |
-| `/webhook` | `POST` | **Réception** du *payload* d'une nouvelle activité Strava pour le traitement et l'insertion dans Notion. |
